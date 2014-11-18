@@ -88,6 +88,15 @@ nav a:hover{
 nav a#pull {
 	display: none;
 }
+
+.container2{
+	position:relative;
+	float:left;
+	min-width:90%;
+	width:90%;
+	margin-left:5%;
+	margin-top:5%;
+}
 /*Styles for screen 600px and lower*/
 @media screen and (max-width: 768px) {
 	nav { 

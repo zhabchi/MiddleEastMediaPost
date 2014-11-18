@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Admin</title>
+<link href="web/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="web/css/style.css" rel='stylesheet' type='text/css' />
+</head>
+<div id="home" class="header">
+  <div class="top-header">
+    <div class="container">
+      <div class="logo">
+        <h1>M.E Media Post</h1>
+      </div>
+      <nav class="top-nav">
+        <ul class="top-nav">
+          <li class="active"><a href="http://www.middleeastmediapost.us/" class="scroll">Home</a></li>
+          <li><a href="../logout.php" class="scroll">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="container2">
+<div class="admpage">
+  <form action="../upload.php" method="post" enctype="multipart/form-data">
+  
+    Select report name:
+    <input type="text" name="reportname" /><br>
+    Select report to upload:
+    <input type="file" name="fileToUpload" id="fileToUpload">
+    <input type="submit" value="Upload Report" name="submit">
+  </form>
+</div>
+</div>
+<body>
+</body>
+</html>
