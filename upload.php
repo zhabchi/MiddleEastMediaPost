@@ -28,7 +28,8 @@ if ($uploadOk == 0) {
 		$reportName = $_POST["reportname"];
 		$entry = $reportName.";". basename( $_FILES["fileToUpload"]["name"])."\n";
 		file_put_contents("web/reports.txt", $entry, FILE_APPEND);
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        //echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+		header("Location:main.html");
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

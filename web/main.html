@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,35 +8,186 @@
 <script src="js/jquery.min.js"></script>
 <!-- Custom Theme files -->
 <link href="web/css/style.css" rel='stylesheet' type='text/css' />
+   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxcore.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxbuttons.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxscrollbar.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxmenu.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxgrid.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxgrid.selection.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxgrid.filter.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxdata.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxlistbox.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxdropdownlist.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxcheckbox.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxgrid.edit.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxnumberinput.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxdatetimeinput.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxcalendar.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxvalidator.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/jqxgrid.grouping.js"></script>
+   <script type="text/javascript" src="web/jqwidgets/demos.js"></script>
+   <link rel="stylesheet" href="web/jqwidgets/styles/jqx.base.css" type="text/css" />
+   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+   <script type="text/javascript">
+   $(document).ready(function () {
+
+
+      var source =
+      {
+         datatype: "csv",
+         datafields: [
+            { name: 'description', type: 'string' },
+            { name: 'path', type: 'string' }
+
+         ],
+         url: '/web/reports.txt',
+         updaterow: function (rowid, rowdata, commit) {
+            // synchronize with the server - send update command
+            var data = "update=true&description=" + rowdata.description + "&path=" + rowdata.path;
+            $.ajax({
+               dataType: 'csv',
+               //url: 'modifyreport.php',
+               data: data,
+               success: function (data, status, xhr) {
+                  // update command is executed.
+                  commit(true);
+               },
+               error: function () {
+                  // cancel changes.
+                  commit(false);
+               }
+            });
+         },
+		 deleterow: function (row,  commit) {          
+            // synchronize with the server - send update command  
+		
+            var data = "delete=true&path="+row.path+"&description="+row.description;
+
+            $.ajax({
+               dataType: 'csv',
+               url: 'modifyreport.php',
+               data: data,
+               success: function (data, status, xhr) {
+                     // update command is executed. 
+					            
+                     commit(true);
+               },
+               error: function () {
+                     // cancel changes.
+                  
+                     commit(true);
+               }
+            });
+         },
+         cache: false,
+         columnDelimiter: ';',
+         rowDelimiter : '\n'
+
+      };
+
+      var dataAdapter = new $.jqx.dataAdapter(source);
+
+      $("#jqxgrid").jqxGrid(
+      {
+         source: source,
+         width: 500,
+         editable: true,
+         selectionmode: 'singlerow',
+         editmode: 'click',
+         showstatusbar: true,
+         renderstatusbar: function (statusbar) {
+            // appends buttons to the status bar.
+            var container = $("<div style='overflow: hidden; position: relative; margin: 5px;'></div>");
+            //var addButton = $("<div style='float: left; margin-left: 5px;'><img style='position: relative; margin-top: 2px;' src='images/add.png'/><span style='margin-left: 4px; position: relative; top: -3px;'>Add</span></div>");
+            var deleteButton = $("<div style='float: left; margin-left: 5px;'><img style='position: relative; margin-top: 2px;' src=''/><span style='margin-left: 4px; position: relative; top: -3px;'>Delete</span></div>");
+            var reloadButton = $("<div style='float: left; margin-left: 5px;'><img style='position: relative; margin-top: 2px;' src=''/><span style='margin-left: 4px; position: relative; top: -3px;'>Reload</span></div>");
+            //var pushbutton = $("<div style='float: left; margin-left: 5px;'><img style='position: relative; margin-top: 2px;' src='images/refresh.png'/><span style='margin-left: 4px; position: relative; top: -3px;'>Notify</span></div>");
+            //container.append(addButton);
+            //container.append(pushbutton);
+            container.append(deleteButton);
+            container.append(reloadButton);
+            statusbar.append(container);
+            //addButton.jqxButton({ theme: theme, width: 60, height: 20 });
+            deleteButton.jqxButton({ theme: theme, width: 65, height: 20 });
+            reloadButton.jqxButton({ theme: theme, width: 65, height: 20 });
+            //pushbutton.jqxButton({ theme: theme, width: 65, height: 20 });
+            // add new row.
+            deleteButton.click(function (event){
+                        // delete row.                       
+                        var selectedrowindex = $("#jqxgrid").jqxGrid('getselectedrowindex');
+                        
+                        var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
+                        if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+						   var datarow = $("#jqxgrid").jqxGrid('getrowdata', selectedrowindex);
+                           //var id = $("#jqxgrid").jqxGrid('getrowid', selectedrowindex);
+                           //php call to remove from db
+                           var commit = $("#jqxgrid").jqxGrid('deleterow', datarow);
+						   $("#jqxgrid").jqxGrid('deleterow', selectedrowindex);
+                           //$("#jqxgrid").jqxGrid('updatebounddata');
+                        }                       
+                    });
+
+            reloadButton.click(function (event) {
+				$("#jqxgrid").jqxGrid('updatebounddata');
+               //var row = {};
+               //$("#jqxgrid").jqxGrid('addrow', null, row);
+            //   window.location.replace("push_prices.php");
+            });
+         },
+
+         columns: [
+            { text: 'description', datafield: 'description', width: 150, editable: false },
+            { text: 'Path', datafield: 'path', width: 350, editable: false }]
+      });
+   });
+   </script>
+
+
 </head>
-<div id="home" class="header">
-  <div class="top-header">
-    <div class="container">
-      <div class="logo">
-        <h1>M.E Media Post</h1>
-      </div>
-      <nav class="top-nav">
-        <ul class="top-nav">
-          <li class="active"><a href="http://www.middleeastmediapost.us/" class="scroll">Home</a></li>
-          <li><a href="../logout.php" class="scroll">Logout</a></li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</div>
-<div class="clearfix"></div>
-<div class="container2">
-<div class="admpage">
-  <form action="../upload.php" method="post" enctype="multipart/form-data">
-  
-    Select report name:
-    <input type="text" name="reportname" /><br>
-    Select report to upload:
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload Report" name="submit">
-  </form>
-</div>
-</div>
 <body>
+   <div id="home" class="header">
+      <div class="top-header">
+         <div class="container">
+            <div class="logo">
+               <h1>M.E Media Post</h1>
+            </div>
+            <nav class="top-nav">
+               <ul class="top-nav">
+                  <li class="active"><a href="http://www.middleeastmediapost.us/" class="scroll">Home</a></li>
+                  <li><a href="../logout.php" class="scroll">Logout</a></li>
+               </ul>
+            </nav>
+         </div>
+      </div>
+   </div>
+   <div class="clearfix"></div>
+   <div class="report">
+      <form action="../upload.php" method="post" enctype="multipart/form-data">
+         <table>
+            <tr>
+               <td>Select report name:</td>
+               <td><input type="text" name="reportname" /></td>
+            </tr>
+            <tr>
+               <td>Select report to upload:</td>
+               <td><input type="file" name="fileToUpload" id="fileToUpload"></td>
+            </tr>
+            <tr>
+               <td colspan="2"><input type="submit" value="Upload Report" name="submit"></td>
+            </tr>
+         </table>
+      </form>
+      <div id="jqxgrid"></div>
+   </div>
+   <div class="bottom">
+      <div class="container">
+         <div class="copy-right">
+            <p>&copy; 2014  All rights  Reserved | Designed by &nbsp;<a href="http://www.ziadhabchi.com">zpro</a></p>
+         </div>
+         </div>
+      </div>
+
 </body>
 </html>

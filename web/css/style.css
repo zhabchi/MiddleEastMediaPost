@@ -89,14 +89,22 @@ nav a#pull {
 	display: none;
 }
 
-.container2{
-	position:relative;
+.report{
+	position: relative;
+	width:100%;
 	float:left;
-	min-width:90%;
-	width:90%;
-	margin-left:5%;
-	margin-top:5%;
+	min-width:80%;
+	padding-left:20px;
+	padding-top:50px;
+	background:#CEECF2;
 }
+
+.report table tr td{
+	padding-top: .5em;
+    padding-bottom: .5em;
+	padding-left: 1em;
+}
+
 /*Styles for screen 600px and lower*/
 @media screen and (max-width: 768px) {
 	nav { 
