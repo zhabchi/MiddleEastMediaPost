@@ -688,7 +688,7 @@ i.Group {
 	font-size:10px;
 }
 .accordation_menu input:checked ~ div.content{
-	height:243px;
+	height:343px;
 	background:#f9f9f9;
 }
 /*** For Change Animation Effects ****/
@@ -1612,6 +1612,13 @@ span.t-icon{
 span.in-icon{
 	background-position: -93px 5px;
 }
+
+span.pin-icon{
+	background-position: -130px 5px;
+}
+
+
+
 li a span{
 		background:#DB2927  url(../images/f-icons.png) no-repeat -44px -163px;
 		width:30px;
