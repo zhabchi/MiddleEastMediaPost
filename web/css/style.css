@@ -1617,7 +1617,9 @@ span.pin-icon{
 	background-position: -130px 5px;
 }
 
-
+span.g-icon{
+	background-position: -153px 5px;
+}
 
 li a span{
 		background:#DB2927  url(../images/f-icons.png) no-repeat -44px -163px;
